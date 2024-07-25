@@ -38,5 +38,5 @@ options:
 
 examples:
   condense -i video.mkv out.mp3 # expects video.srt (or .ass/.ssa) to exist
-  condense -i video.mp4 -s video_sub.srt out.acc
+  condense -i video.mp4 -s video_sub.srt out.aac
 ```
