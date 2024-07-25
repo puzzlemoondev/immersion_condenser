@@ -41,7 +41,7 @@ def parse_args():
             f"""
         examples:
           {prog} -i video.mkv out.mp3 # expects video.srt (or .ass/.ssa) to exist
-          {prog} -i video.mp4 -s video_sub.srt out.acc
+          {prog} -i video.mp4 -s video_sub.srt out.aac
             """
         ),
     )
