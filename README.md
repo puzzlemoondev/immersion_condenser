@@ -1,6 +1,6 @@
 # Immersion Condenser
 
-Condense video to dialogue audio for passive immersion.
+Simple script that condense video to dialogue audio for passive immersion.
 I made this because I couldn't find a condenser for Unix-like systems.
 
 ## Requirements
