@@ -55,7 +55,7 @@ def parse_args():
     )
     parser.add_argument(
         "output",
-        type=lambda v: filepath(v, False),
+        type=Path,
         help="Output path for condensed audio with format that ffmpeg supports",
     )
     parser.add_argument(
@@ -156,6 +156,8 @@ def main():
     args = parse_args()
     video_path = cast(Path, args.video)
     output_path = cast(Path, args.output)
+    if output_path.is_dir():
+        output_path = output_path.joinpath(video_path.with_suffix(".aac").name)
     subtitles_path = cast(Path, args.subtitles or find_subtitles(video_path))
 
     subtitles = parse_srt(subtitles_path)
