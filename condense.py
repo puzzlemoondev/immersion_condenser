@@ -24,6 +24,8 @@ finally:
 
 Segment = tuple[str, str]
 
+MUSIC_SYMBOLS = ("♬",)
+
 
 def filepath(value, strict=True):
     path = Path(value).resolve()
@@ -65,6 +67,18 @@ def parse_args():
         default=None,
         help="Path to subtitles file. Default to .srt/.ass/.ssa file with the same name as input video",
     )
+    parser.add_argument(
+        "-f",
+        "--filters",
+        type=str,
+        default="",
+        help="Space separated words used to filter out subtitles",
+    )
+    parser.add_argument(
+        "--skip-filter-music",
+        action="store_true",
+        help="Do not try filter out music subtitles",
+    )
     return parser.parse_args()
 
 
@@ -79,13 +93,15 @@ def format_timedelta(timedelta_timestamp: timedelta) -> str:
     return srt.timedelta_to_srt_timestamp(timedelta_timestamp).replace(",", ".")
 
 
-def parse_srt(subtitles_path: Path) -> Iterable[Segment]:
+def parse_srt(subtitles_path: Path, filters: set[str]) -> Iterable[Segment]:
     srt_path = subtitles_path.with_suffix(".srt")
     if subtitles_path.suffix != ".srt":
         call_ffmpeg("-i", str(subtitles_path), "-c:s", "srt", str(srt_path))
 
     subs = srt.parse(srt_path.read_text())
     for sub in srt.sort_and_reindex(subs):
+        if filters and any(word in sub.content for word in filters):
+            continue
         yield format_timedelta(sub.start), format_timedelta(sub.end)
 
 
@@ -160,7 +176,13 @@ def main():
         output_path = output_path.joinpath(video_path.with_suffix(".aac").name)
     subtitles_path = cast(Path, args.subtitles or find_subtitles(video_path))
 
-    subtitles = parse_srt(subtitles_path)
+    filters: set[str] = set()
+    if args.filters:
+        filters.update(word for word in args.filters.split(" ") if word)
+    if not args.skip_filter_music:
+        filters.update(MUSIC_SYMBOLS)
+
+    subtitles = parse_srt(subtitles_path, filters)
     condense(
         subtitles,
         video_path,

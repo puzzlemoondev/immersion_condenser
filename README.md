@@ -20,7 +20,9 @@ Or clone the repo and run `make install`
 ## Usage
 
 ```
-usage: condense [-h] -i VIDEO [-s SUBTITLES] output
+usage: condense [-h] -i VIDEO [-s SUBTITLES] [-f FILTERS]
+                [--skip-filter-music]
+                output
 
 Condense video to dialogue audio for passive immersion
 
@@ -35,6 +37,9 @@ options:
   -s SUBTITLES, --subtitles SUBTITLES
                         Path to subtitles file. Default to .srt/.ass/.ssa file
                         with the same name as input video
+  -f FILTERS, --filters FILTERS
+                        Space separated words used to filter out subtitles
+  --skip-filter-music   Do not try filter out music subtitles
 
 examples:
   condense -i video.mkv out.mp3 # expects video.srt (or .ass/.ssa) to exist
