@@ -5,9 +5,8 @@ I made this because I couldn't find a condenser for Unix-like systems.
 
 ## Requirements
 
-- `python3` somewhere in your PATH
+- `python3` (>=3.7) somewhere in your PATH 
 - `ffmpeg` somewhere in your PATH
-- `srt` module will be installed by the script, or you can run `pip install srt` first
 
 ## Install
 
@@ -45,3 +44,7 @@ examples:
   condense -i video.mkv out.mp3 # expects video.srt (or .ass/.ssa) to exist
   condense -i video.mp4 -s video_sub.srt out.aac
 ```
+
+## Credits
+
+- srt parsing from [srt](https://github.com/cdown/srt)
